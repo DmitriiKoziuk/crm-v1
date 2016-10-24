@@ -4,10 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $job backend\models\Job */
 /**
- * @var $task backend\models\Task
+ * @var $this      yii\web\View
+ * @var $job       backend\models\Job
+ * @var $task      backend\models\Task
+ * @var $userRoles yii\rbac\Role[]
  */
 
 $this->title = $job->id;
@@ -89,6 +90,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php if (($job->performer_id == Yii::$app->user->identity->getId() || $job->creator_id == Yii::$app->user->identity->getId()) && $job->status == 'on-the-job' && $job->status != 'done'): ?>
                 <?= Html::a(Yii::t('app', 'Suspend'), ['/job/suspend', 'id' => $job->id], ['class' => 'btn btn-warning']) ?>
                 <?= Html::a(Yii::t('app', 'Done'), ['/job/done', 'id' => $job->id], ['class' => 'btn btn-success']) ?>
+            <?php endif; ?>
+
+            <?php if (isset($userRoles['admin']) || isset($userRoles['accountant'])): ?>
+                <?= Html::a(Yii::t('app', 'Close'), ['/job/close', 'id' => $job->id], ['class' => 'btn btn-danger']) ?>
             <?php endif; ?>
         </div>
         <div class="col-md-3 right-btn">

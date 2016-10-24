@@ -8,6 +8,7 @@ use backend\models\UserSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -63,9 +64,11 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        $status = false;
-        $model = new User();
+        $status          = false;
+        $model           = new User();
         $model->scenario = User::SCENARIO_ADD;
+        $roleList        = ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name');
+        $userRole        = [];
 
         if ( Yii::$app->request->isPost ) {
             if ( $model->load( Yii::$app->request->post() ) ) {
@@ -82,6 +85,28 @@ class UserController extends Controller
                         $status = true;
                     }
                 }
+
+                $newUserRoles = Yii::$app->request->post('role');
+                $tmp          = [];
+                foreach ($newUserRoles as $newUserRole) {
+                    $tmp[ $newUserRole ] = $newUserRole;
+                }
+                $newUserRoles = $tmp;
+
+                foreach ($userRole as $roleName => $data) {
+                    if (key_exists($roleName, $newUserRoles)) {
+                        unset($newUserRoles[ $roleName ]);
+                    } else {
+                        $role = Yii::$app->authManager->getRole($roleName);
+                        Yii::$app->authManager->revoke($role, $model->id);
+                    }
+                }
+
+                foreach ($newUserRoles as $roleName) {
+                    $role = Yii::$app->authManager->getRole($roleName);
+                    Yii::$app->authManager->assign($role, $model->id);
+                    $userRole[ $roleName ] = $roleName;
+                }
             }
         }
 
@@ -90,6 +115,8 @@ class UserController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'roleList' => $roleList,
+                'userRole' => $userRole,
             ]);
         }
     }
@@ -104,6 +131,8 @@ class UserController extends Controller
     {
         $model           = $this->findModel($id);
         $status          = false;
+        $roleList        = ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name');
+        $userRole        = ArrayHelper::map(Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId()), 'name', 'name');
 
         if (Yii::$app->request->isPost) {
             $model->scenario = User::SCENARIO_UPDATE;
@@ -129,6 +158,28 @@ class UserController extends Controller
                 if ($model->save()) {
                     $status = true;
                 }
+
+                $newUserRoles = Yii::$app->request->post('role');
+                $tmp          = [];
+                foreach ($newUserRoles as $newUserRole) {
+                    $tmp[ $newUserRole ] = $newUserRole;
+                }
+                $newUserRoles = $tmp;
+
+                foreach ($userRole as $roleName => $data) {
+                    if (key_exists($roleName, $newUserRoles)) {
+                        unset($newUserRoles[ $roleName ]);
+                    } else {
+                        $role = Yii::$app->authManager->getRole($roleName);
+                        Yii::$app->authManager->revoke($role, Yii::$app->user->getId());
+                    }
+                }
+
+                foreach ($newUserRoles as $roleName) {
+                    $role = Yii::$app->authManager->getRole($roleName);
+                    Yii::$app->authManager->assign($role, Yii::$app->user->getId());
+                    $userRole[ $roleName ] = $roleName;
+                }
             }
         }
         if ($status) {
@@ -136,6 +187,8 @@ class UserController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'roleList' => $roleList,
+                'userRole' => $userRole,
             ]);
         }
     }

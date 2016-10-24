@@ -60,13 +60,15 @@ class JobController extends Controller
      */
     public function actionView($id)
     {
-        $job = Job::find()->where(['id' => $id])->one();
+        $job       = Job::find()->where(['id' => $id])->one();
+        $userRoles = Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
 
         if (is_null($job)) {
             throw new NotFoundHttpException();
         } else {
             return $this->render('view', [
                 'job' =>$job,
+                'userRoles' => $userRoles,
             ]);
         }
     }
@@ -268,7 +270,9 @@ class JobController extends Controller
             $taskList[] = clone $task;
         }
 
-        if ($job->status == 'done') {
+        $userRoles = Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
+
+        if ($job->status == 'done' && isset($userRoles['mechanic'])) {
             return $this->redirect(['view', 'id' => $job->id]);
         } else {
             return $this->render('update', [
