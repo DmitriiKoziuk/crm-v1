@@ -340,7 +340,8 @@
         <TD STYLE=" border-left-style: none;"><SPAN></SPAN></TD>
         <TD>&nbsp;</TD>
     </TR>
-    <?php foreach ($job->tasks as $number => $task): ?>
+    <?php $number = 1; ?>
+    <?php foreach ($job->tasks as $task): ?>
     <TR CLASS=R0>
         <TD STYLE=" border-left-style: none;"><SPAN></SPAN></TD>
         <TD CLASS="R13C1" COLSPAN=2><SPAN STYLE="white-space:nowrap;"><?= ++$number ?></SPAN></TD>
@@ -351,6 +352,18 @@
         <TD CLASS="R13C34" COLSPAN=4><SPAN STYLE="white-space:nowrap;"><?= $task->price ?></SPAN></TD>
         <TD></TD>
     </TR>
+    <?php endforeach; ?>
+    <?php foreach ($job->parts as $part): ?>
+        <TR CLASS=R0>
+            <TD STYLE=" border-left-style: none;"><SPAN></SPAN></TD>
+            <TD CLASS="R13C1" COLSPAN=2><SPAN STYLE="white-space:nowrap;"><?= ++$number ?></SPAN></TD>
+            <TD CLASS="R13C3" COLSPAN=3><?= $part->id ?></TD>
+            <TD CLASS="R13C6" COLSPAN=20><?= $part->name ?></TD>
+            <TD CLASS="R13C26" COLSPAN=5><SPAN STYLE="white-space:nowrap;"><?= $part->quantity ?></SPAN></TD>
+            <TD CLASS="R13C26" COLSPAN=3><SPAN STYLE="white-space:nowrap;"><?= $part->price ?></SPAN></TD>
+            <TD CLASS="R13C34" COLSPAN=4><SPAN STYLE="white-space:nowrap;"><?= ($part->quantity * $part->price) ?></SPAN></TD>
+            <TD></TD>
+        </TR>
     <?php endforeach; ?>
     <TR CLASS=R14>
         <TD STYLE=" border-left-style: none;"><DIV STYLE="width:100%;height:9px;overflow:hidden;"><SPAN></SPAN></DIV></TD>
@@ -451,7 +464,7 @@
     </TR>
     <TR CLASS=R0>
         <TD STYLE=" border-left-style: none;"><SPAN></SPAN></TD>
-        <TD COLSPAN=37><SPAN STYLE="white-space:nowrap;">Всього&nbsp;найменувань&nbsp;<?= count($job->tasks) ?>,&nbsp;на&nbsp;суму&nbsp;<?= number_format($job->getTotalPrice(), 2, ',', '') ?>&nbsp;грн.</SPAN></TD>
+        <TD COLSPAN=37><SPAN STYLE="white-space:nowrap;">Всього&nbsp;найменувань&nbsp;<?= $number ?>,&nbsp;на&nbsp;суму&nbsp;<?= number_format($job->getTotalPrice(), 2, ',', '') ?>&nbsp;грн.</SPAN></TD>
         <TD></TD>
     </TR>
     <TR CLASS=R3>

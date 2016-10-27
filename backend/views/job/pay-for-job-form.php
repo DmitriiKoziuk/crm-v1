@@ -80,6 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'vehicle_id',
             //'creator_id',
             'created_at:date',
+            'done_at:date',
             [
                 'attribute' => 'status',
                 'content'   => function ($model) {

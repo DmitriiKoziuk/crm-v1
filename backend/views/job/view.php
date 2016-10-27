@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /**
  * @var $this      yii\web\View
@@ -78,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
 
     <div class="row action-btn">
-        <div class="col-md-9">
+        <div class="col-md-8">
             <?php if (! $job->isPerformerSet()): ?>
                 <?= Html::a(Yii::t('app', 'On the job'), ['/job/take-job', 'id' => $job->id], ['class' => 'btn btn-info']) ?>
             <?php endif; ?>
@@ -87,16 +88,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a(Yii::t('app', 'To work'), ['/job/to-work', 'id' => $job->id], ['class' => 'btn btn-info']) ?>
             <?php endif; ?>
 
-            <?php if (($job->performer_id == Yii::$app->user->identity->getId() || $job->creator_id == Yii::$app->user->identity->getId()) && $job->status == 'on-the-job' && $job->status != 'done'): ?>
-                <?= Html::a(Yii::t('app', 'Suspend'), ['/job/suspend', 'id' => $job->id], ['class' => 'btn btn-warning']) ?>
+            <?php if ($job->isUserCanDone()): ?>
                 <?= Html::a(Yii::t('app', 'Done'), ['/job/done', 'id' => $job->id], ['class' => 'btn btn-success']) ?>
             <?php endif; ?>
 
-            <?php if (isset($userRoles['admin']) || isset($userRoles['accountant'])): ?>
+            <?php if ($job->isUserCanSuspend()): ?>
+                <?= Html::a(Yii::t('app', 'Suspend'), ['/job/suspend', 'id' => $job->id], ['class' => 'btn btn-warning']) ?>
+            <?php endif; ?>
+
+            <?php if (Yii::$app->user->can('closeJob')): ?>
                 <?= Html::a(Yii::t('app', 'Close'), ['/job/close', 'id' => $job->id], ['class' => 'btn btn-danger']) ?>
             <?php endif; ?>
         </div>
-        <div class="col-md-3 right-btn">
+        <div class="col-md-4 right-btn">
+            <?= Html::a(Yii::t('app', 'Print invoice'), Url::to(['print', 'id' => $job->id]), ['class' => 'btn btn-info']) ?>
+
             <?php if($job->status != 'done'): ?>
                 <?php if($job->creator_id == Yii::$app->user->identity->getId() || $job->isPerformerSet() && $job->performer_id == Yii::$app->user->identity->getId()): ?>
                     <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $job->id], ['class' => 'btn btn-primary']) ?>

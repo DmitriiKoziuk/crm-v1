@@ -46,7 +46,7 @@ class JobSearch extends Job
      */
     public function search($params)
     {
-        $query = Job::find()->with(['vehicle.model.brand', 'creator'])->orderBy([new Expression('FIELD(job.status, "new", "on-the-job", "pending", "done")')]);
+        $query = Job::find()->with(['vehicle.model.brand', 'creator'])->orderBy([new Expression('FIELD(job.status, "new", "on-the-job", "pending", "done", "closed")')]);
 
         // add conditions that should always apply here
 

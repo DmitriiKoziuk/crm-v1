@@ -32,10 +32,13 @@ $q = "CREATE TABLE job (
     creator_id SMALLINT UNSIGNED NOT NULL COMMENT 'User id',
     performer_id SMALLINT UNSIGNED DEFAULT 0 COMMENT 'User id',
     created_at DATETIME,
-    status ENUM('new', 'on-the-job', 'pending', 'done') DEFAULT 'new',
+    status ENUM('new', 'on-the-job', 'pending', 'done','closed') DEFAULT 'new',
     addition TEXT COMMENT 'Additional Information',
-    pay INT(1) UNSIGNED NOT NULL DEFAULT 0
+    pay INT(1) UNSIGNED NOT NULL DEFAULT 0,
+    done_at DATETIME DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$q = "ALTER TABLE job ADD done_at DATETIME DEFAULT NULL";
 
 $q = "CREATE TABLE task (
 	id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -54,3 +57,11 @@ $q = "CREATE TABLE job_log (
     info VARCHAR(255) NOT NULL,
     created_at DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$q = "CREATE TABLE parts (
+	id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    job_id SMALLINT UNSIGNED NOT NULL,
+    name TEXT NOT NULL,
+    price FLOAT DEFAULT 0,
+    quantity SMALLINT UNSIGNED NOT NULL DEFAULT 1,
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;";

@@ -132,12 +132,15 @@ table thead {
     background: #e4e4fd;
 }
 .table-striped > tbody > tr.on-the-job {
-    background: #CCFFCC;
+    background: #FFF;
 }
 .table-striped > tbody > tr.pending {
     background: #ffe4af;
 }
 .table-striped > tbody > tr.done {
+    background: #CCFFCC;
+}
+.table-striped > tbody > tr.closed {
     background: #CCCCCC;
 }
 
@@ -212,12 +215,15 @@ table thead {
     background-color: #337ab7;
 }
 .job-status.on-the-job {
-    background-color: #5cb85c;
+    background-color: #00CCCC;
 }
 .job-status.pending {
     background-color: #f0ad4e;
 }
 .job-status.done {
+    background-color: #66CC66;
+}
+.job-status.closed {
     background-color: #777;
 }
 .job-status.paid {

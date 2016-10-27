@@ -127,4 +127,55 @@ class SiteController extends Controller
         Yii::$app->authManager->assign($role, 22);
         Yii::$app->authManager->assign($role, 23);
     }
+
+    public function actionAddNewPermissionToRole()
+    {
+        $permission = Yii::$app->authManager->createPermission('closeJob');
+        $permission->description = 'Закрывать работу';
+        Yii::$app->authManager->add($permission);
+
+        $role1 = Yii::$app->authManager->getRole('admin');
+        $role2 = Yii::$app->authManager->getRole('accountant');
+
+        Yii::$app->authManager->addChild($role1, $permission);
+        Yii::$app->authManager->addChild($role2, $permission);
+    }
+
+    public function actionAddNewPermissionToRole2()
+    {
+        $permission = Yii::$app->authManager->createPermission('suspendJob');
+        $permission->description = 'Переводить работу в состояние ожидания';
+        Yii::$app->authManager->add($permission);
+
+        $role1 = Yii::$app->authManager->getRole('admin');
+        $role2 = Yii::$app->authManager->getRole('accountant');
+        $role3 = Yii::$app->authManager->getRole('mechanic');
+
+        Yii::$app->authManager->addChild($role1, $permission);
+        Yii::$app->authManager->addChild($role2, $permission);
+        Yii::$app->authManager->addChild($role3, $permission);
+
+        $permission = Yii::$app->authManager->createPermission('doneJob');
+        $permission->description = 'Переводить работу в состояние выполнено';
+        Yii::$app->authManager->add($permission);
+
+        Yii::$app->authManager->addChild($role1, $permission);
+        Yii::$app->authManager->addChild($role2, $permission);
+        Yii::$app->authManager->addChild($role3, $permission);
+    }
+
+    public function actionAddNewPermissionToRole3()
+    {
+        $permission = Yii::$app->authManager->createPermission('updateJob');
+        $permission->description = 'Переводить работу в состояние ожидания';
+        Yii::$app->authManager->add($permission);
+
+        $role1 = Yii::$app->authManager->getRole('admin');
+        $role2 = Yii::$app->authManager->getRole('accountant');
+        $role3 = Yii::$app->authManager->getRole('mechanic');
+
+        Yii::$app->authManager->addChild($role1, $permission);
+        Yii::$app->authManager->addChild($role2, $permission);
+        Yii::$app->authManager->addChild($role3, $permission);
+    }
 }

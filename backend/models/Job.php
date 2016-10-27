@@ -18,11 +18,13 @@ use backend\models\User;
  * @property string  $status
  * @property string  $addition
  * @property integer $pay
+ * @property string  $done_at
  *
  * @property Client  $client
  * @property Vehicle $vehicle
  * @property User    $creator
  * @property Task[]  $tasks
+ * @property Parts[] $parts
  * @property User    $performer
  * @property string  $performerName
  */
@@ -52,6 +54,7 @@ class Job extends ActiveRecord
             [['created_at', 'tasks'], 'safe', 'on' => self::SCENARIO_ADD],
             [['status', 'addition'], 'string', 'on' => self::SCENARIO_ADD],
             [['performer_id', 'pay'], 'default', 'value' => 0, 'on' => self::SCENARIO_ADD],
+            [['done_at'], 'default', 'value' => NULL, 'on' => self::SCENARIO_ADD],
 
             [['performer_id'], 'required', 'on' => self::SCENARIO_UPDATE],
             [['performer_id'], 'integer', 'on' => self::SCENARIO_UPDATE],
@@ -71,6 +74,7 @@ class Job extends ActiveRecord
             'creator_id'     => 'Creator ID',
             'performer_id'   => Yii::t('app', 'Performer'),
             'created_at'     => Yii::t('app', 'Created At'),
+            'done_at'     => Yii::t('app', 'Done At'),
             'status'         => Yii::t('app', 'Status'),
             'addition'       => Yii::t('app', 'Addition'),
             'imageFiles'     => 'Vehicle images',
@@ -107,6 +111,11 @@ class Job extends ActiveRecord
     public function getTasks()
     {
         return $this->hasMany(Task::className(), ['job_id' => 'id']);
+    }
+
+    public function getParts()
+    {
+        return $this->hasMany(Parts::className(), ['job_id' => 'id']);
     }
 
     public function getClientFullName()
@@ -172,23 +181,22 @@ class Job extends ActiveRecord
             }
         }
 
+        if (! isset($this->parts)) {
+            $this->parts;
+        }
+
+        foreach ($this->parts as $part) {
+            if ($part->price != 0 && $part->quantity != 0) {
+                $totalPrice += ($part->price * $part->quantity);
+            }
+        }
+
         return $totalPrice;
     }
 
     public function getTotalPriceByString()
     {
-        $totalPrice = 0;
-
-        if (! isset($this->tasks)) {
-            $this->tasks;
-        }
-
-        foreach ($this->tasks as $task) {
-            /* @var $task Task */
-            if ($task->price != 0) {
-                $totalPrice += $task->price;
-            }
-        }
+        $totalPrice = $this->getTotalPrice();
 
         if (is_float($totalPrice)) {
             $price  = explode('.', number_format($totalPrice, 2, '.', ''));
@@ -221,5 +229,56 @@ class Job extends ActiveRecord
     public static function getPerformerList()
     {
         return User::find()->all();
+    }
+
+    public function isUserCanSuspend()
+    {
+        $r = false;
+
+        if (Yii::$app->user->can('suspendJob') && $this->status != 'done') {
+            if (Yii::$app->authManager->getAssignment('mechanic', Yii::$app->user->getId())) {
+                if ($this->performer_id == Yii::$app->user->getId()) {
+                    $r = true;
+                }
+            } else {
+                $r = true;
+            }
+        }
+
+        return $r;
+    }
+
+    public function isUserCanDone()
+    {
+        $r = false;
+
+        if (Yii::$app->user->can('doneJob') && $this->status != 'done') {
+            if (Yii::$app->authManager->getAssignment('mechanic', Yii::$app->user->getId())) {
+                if ($this->performer_id == Yii::$app->user->getId()) {
+                    $r = true;
+                }
+            } else {
+                $r = true;
+            }
+        }
+
+        return $r;
+    }
+
+    public function isUserCanUpdate()
+    {
+        $r = false;
+
+        if (Yii::$app->user->can('updateJob')) {
+            if (Yii::$app->authManager->getAssignment('mechanic', Yii::$app->user->getId())) {
+                if ($this->performer_id == Yii::$app->user->getId()) {
+                    $r = true;
+                }
+            } else {
+                $r = true;
+            }
+        }
+
+        return $r;
     }
 }

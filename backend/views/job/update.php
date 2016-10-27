@@ -6,12 +6,15 @@ use backend\assets\CreateJobAsset;
 use unclead\widgets\MultipleInput;
 use unclead\widgets\TabularInput;
 use backend\models\Task;
+use backend\models\Parts;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 /**
  * @var $this          yii\web\View
  * @var $job           backend\models\Job
  * @var $taskList      array
+ * @var $partsList     array
  * @var $performerList array
  */
 
@@ -128,12 +131,81 @@ CreateJobAsset::register($this);
                     ],
                 ],
             ]) ?>
+
+            <div class="total">
+                <div class="price">
+                    <div>Исполнитель получит: <?= number_format($job->getPerformerPrice(), 2, '.', ' ') ?> грн.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="task-wrapper">
+        <div class="task">
+            <span class="line"></span>
+            <span class="title"><?= Yii::t('app', 'Parts') ?></span>
+        </div>
+
+        <div class="list">
+            <?= TabularInput::widget([
+                'models' => count($partsList) != 0 ? $partsList : [0 => new Parts()],
+                'columns' => [
+                    [
+                        'name'  => 'id',
+                        'title' => 'Id',
+                        'type'  => 'textInput',
+                        'options' => ['style' => 'display:none;'],
+                        'headerOptions' => ['style' => 'display:none;'],
+                        'value' => function ($data) {
+                            return $data->id;
+                        }
+                    ],
+                    [
+                        'name'  => 'name',
+                        'type'  => 'textInput',
+                        'title' => Yii::t('app', 'Name'),
+                        'value' => function ($data) {
+                            return $data->name;
+                        }
+                    ],
+                    [
+                        'name'  => 'quantity',
+                        'type'  => 'textInput',
+                        'title' => Yii::t('app', 'Quantity'),
+                        'headerOptions' => ['style' => 'width: 100px;'],
+                        'value' => function ($data) {
+                            return $data->quantity;
+                        }
+                    ],
+                    [
+                        'name'  => 'price',
+                        'type'  => 'textInput',
+                        'title' => Yii::t('app', 'Price for item'),
+                        'headerOptions' => ['style' => 'width: 100px;'],
+                        'value' => function ($data) {
+                            return $data->price;
+                        }
+                    ],
+                    [
+                        'name'          => 'totalPrice',
+                        'type'          => 'textInput',
+                        'title'         => Yii::t('app', 'Total price'),
+                        'options'       => ['disabled' => true],
+                        'headerOptions' => ['style' => 'width: 100px;'],
+                        'value'         => function ($data) {
+                            if ($data->quantity != 0) {
+                                return ($data->price * $data->quantity);
+                            } else {
+                                return 0;
+                            }
+                        },
+                    ],
+                ],
+            ]) ?>
+
             <div class="total">
                 <div class="price">
                     <div>Всего к оплате: <?= number_format($job->getTotalPrice(), 2, '.', ' ') ?> грн.</div>
-                </div>
-                <div class="price">
-                    <div>Исполнитель получит: <?= number_format($job->getPerformerPrice(), 2, '.', ' ') ?> грн.</div>
                 </div>
             </div>
         </div>
@@ -153,7 +225,11 @@ CreateJobAsset::register($this);
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => $job->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php if ($job->isUserCanUpdate()): ?>
+            <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => $job->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?php endif; ?>
+
+        <?= Html::a(Yii::t('app', 'Print invoice'), Url::to(['print', 'id' => $job->id]), ['class' => 'btn btn-info']) ?>
     </div>
 
     <?php $form->end() ?>

@@ -18,6 +18,7 @@ use unclead\widgets\MultipleInput;
  * @var $brand         backend\models\Brand
  * @var $model         backend\models\Model
  * @var $task          backend\models\Task
+ * @var $parts         backend\models\Parts
  * @var $performerList array
  */
 

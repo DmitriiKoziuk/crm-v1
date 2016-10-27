@@ -10,6 +10,7 @@ use yii\helpers\Html;
  * @var $brand         backend\models\Brand
  * @var $model         backend\models\Model
  * @var $task          backend\models\Task
+ * @var $parts         backend\models\Parts
  * @var $performerList array
  */
 
@@ -28,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'brand'         => $brand,
         'model'         => $model,
         'task'          => $task,
+        'parts'         => $parts,
         'performerList' => $performerList,
     ]) ?>
 

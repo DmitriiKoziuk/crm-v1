@@ -15,6 +15,7 @@ use backend\models\Vehicle;
 use backend\models\Brand;
 use backend\models\Model;
 use backend\models\Task;
+use backend\models\Parts;
 use backend\models\User;
 
 /**
@@ -86,6 +87,7 @@ class JobController extends Controller
         $brand         = new Brand();
         $model         = new Model();
         $task          = new Task();
+        $parts         = new Parts();
         $job           = new Job();
         $job->scenario = Job::SCENARIO_ADD;
         $performerList = User::find()->all();
@@ -190,6 +192,7 @@ class JobController extends Controller
                 'brand'         => $brand,
                 'model'         => $model,
                 'task'          => $task,
+                'parts'         => $parts,
                 'performerList' => $performerList,
             ]);
         }
@@ -208,7 +211,7 @@ class JobController extends Controller
          */
         $job           = Job::find()
             ->where(['id' => $id])
-            ->with(['client', 'vehicle.model.brand', 'tasks'])
+            ->with(['client', 'vehicle.model.brand', 'tasks', 'parts'])
             ->one();
         $performerList = User::find()->all();
 
@@ -258,6 +261,47 @@ class JobController extends Controller
             unset($job->tasks);
             $job->tasks;
 
+            $updateParts = Yii::$app->request->post('Parts');
+
+            foreach ($updateParts as $index => $uPart) {
+                if ($uPart['id'] == '') {
+                    $newPart                    = new Parts();
+                    $newPart->job_id            = $job->id;
+                    $newPart->name              = $uPart['name'];
+                    $newPart->price             = $uPart['price'];
+                    $newPart->quantity          = $uPart['quantity'];
+                    $newPart->save();
+
+                    unset($updateParts[ $index ]);
+                }
+            }
+
+            foreach ($job->parts as $part) {
+                /* @var $task Task */
+                $delete = true;
+                foreach ($updateParts as $uPart) {
+                    if ($part->id == $uPart['id']) {
+                        $delete = false;
+                        if ($part->name != $uPart['name']) {
+                            $part->name = $uPart['name'];
+                        }
+                        if ($part->price != $uPart['price']) {
+                            $part->price = $uPart['price'];
+                        }
+                        if ($part->quantity != $uPart['quantity']) {
+                            $part->quantity = $uPart['quantity'];
+                        }
+                        $part->save();
+                    }
+                }
+                if ($delete) {
+                    $part->delete();
+                }
+            }
+
+            unset($job->parts);
+            $job->parts;
+
             $job->scenario = Job::SCENARIO_UPDATE;
             if ($job->load(Yii::$app->request->post()) && $job->validate()) {
                 $job->save();
@@ -270,6 +314,12 @@ class JobController extends Controller
             $taskList[] = clone $task;
         }
 
+        $partsList = [];
+        foreach ($job->parts as $part) {
+            /* @var $task Task */
+            $partsList[] = clone $part;
+        }
+
         $userRoles = Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId());
 
         if ($job->status == 'done' && isset($userRoles['mechanic'])) {
@@ -278,6 +328,7 @@ class JobController extends Controller
             return $this->render('update', [
                 'job'           => $job,
                 'taskList'      => $taskList,
+                'partsList'     => $partsList,
                 'performerList' => $performerList,
             ]);
         }
@@ -313,7 +364,7 @@ class JobController extends Controller
     {
         $job = Job::findOne($id);
 
-        if ($job->status == 'on-the-job') {
+        if ($job->isUserCanSuspend()) {
             $job->status = 'pending';
             $job->save();
         }
@@ -325,8 +376,7 @@ class JobController extends Controller
     {
         $job = Job::findOne($id);
 
-        if ($job->performer_id == Yii::$app->user->identity->getId() || $job->creator_id == Yii::$app->user->identity->getId())
-        {
+        if ($job->performer_id == Yii::$app->user->identity->getId() || $job->creator_id == Yii::$app->user->identity->getId()) {
             $job->status = 'on-the-job';
             $job->save();
         }
@@ -338,9 +388,21 @@ class JobController extends Controller
     {
         $job = Job::findOne($id);
 
-        if ($job->performer_id == Yii::$app->user->identity->getId() || $job->creator_id == Yii::$app->user->identity->getId() && $job->status != 'done')
-        {
-            $job->status = 'done';
+        if ($job->isUserCanDone()) {
+            $job->status  = 'done';
+            $job->done_at = date("Y-m-d H:i:s");
+            $job->save();
+        }
+
+        return $this->redirect(['view', 'id' => $job->id]);
+    }
+
+    public function actionClose($id)
+    {
+        $job = Job::findOne($id);
+
+        if (Yii::$app->user->can('closeJob')) {
+            $job->status = 'closed';
             $job->save();
         }
 
