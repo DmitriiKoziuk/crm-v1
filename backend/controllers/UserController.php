@@ -132,7 +132,7 @@ class UserController extends Controller
         $model           = $this->findModel($id);
         $status          = false;
         $roleList        = ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'name');
-        $userRole        = ArrayHelper::map(Yii::$app->authManager->getRolesByUser(Yii::$app->user->getId()), 'name', 'name');
+        $userRole        = ArrayHelper::map(Yii::$app->authManager->getRolesByUser($model->id), 'name', 'name');
 
         if (Yii::$app->request->isPost) {
             $model->scenario = User::SCENARIO_UPDATE;
@@ -171,13 +171,13 @@ class UserController extends Controller
                         unset($newUserRoles[ $roleName ]);
                     } else {
                         $role = Yii::$app->authManager->getRole($roleName);
-                        Yii::$app->authManager->revoke($role, Yii::$app->user->getId());
+                        Yii::$app->authManager->revoke($role, $model->id);
                     }
                 }
 
                 foreach ($newUserRoles as $roleName) {
                     $role = Yii::$app->authManager->getRole($roleName);
-                    Yii::$app->authManager->assign($role, Yii::$app->user->getId());
+                    Yii::$app->authManager->assign($role, $model->id);
                     $userRole[ $roleName ] = $roleName;
                 }
             }

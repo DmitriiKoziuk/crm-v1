@@ -103,8 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-md-4 right-btn">
             <?= Html::a(Yii::t('app', 'Print invoice'), Url::to(['print', 'id' => $job->id]), ['class' => 'btn btn-info']) ?>
 
-            <?php if($job->status != 'done'): ?>
-                <?php if($job->creator_id == Yii::$app->user->identity->getId() || $job->isPerformerSet() && $job->performer_id == Yii::$app->user->identity->getId()): ?>
+            <?php if (Yii::$app->user->can('closeJob')): ?>
                     <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $job->id], ['class' => 'btn btn-primary']) ?>
                     <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $job->id], [
                         'class' => 'btn btn-danger',
@@ -113,7 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'method' => 'post',
                         ],
                     ]) ?>
-                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>
