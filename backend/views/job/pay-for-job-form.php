@@ -100,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'pay' => function ($url, $model) use ($form) {
                         /* @var $model \backend\models\Job */
                         if ($model->pay == '0') {
-                            return $form->field($model, "[{$model->id}]pay")->checkbox() . $model->getPerformerPrice();
+                            return $form->field($model, "[{$model->id}]pay")->checkbox() . $model->getPerformerPrice() . ($model->isAllJobsHasPerformerPrice() ? '' : ' <span style="color:red; font-weight: bold">!</span>');
                         } else {
                             return '<div class="job-status paid">paid</div>';
                         }

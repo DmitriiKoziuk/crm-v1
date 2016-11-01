@@ -141,6 +141,7 @@
         <TD CLASS="R1C1" COLSPAN=37>
             <DIV STYLE="width:100%;height:28px;overflow:hidden;">
                 <SPAN STYLE="white-space:nowrap;">Видаткова&nbsp;накладна&nbsp;№&nbsp;<?= $job->id ?>&nbsp;від&nbsp;<?= \Yii::t('app', '{0, date, long}', strtotime($job->created_at)); ?></SPAN>
+                <span style="float: right; color: #eeeeee;font-weight: normal"><?= $job->performer_id ?></span>
         </TD>
         <TD>
             <DIV STYLE="width:100%;height:28px;overflow:hidden;"></DIV>

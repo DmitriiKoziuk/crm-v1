@@ -226,6 +226,17 @@ class Job extends ActiveRecord
         return $performerPrice;
     }
 
+    public function isAllJobsHasPerformerPrice()
+    {
+        $r = true;
+        foreach ($this->tasks as $task) {
+            if ($task->performer_percent == 0) {
+                $r = false;
+            }
+        }
+        return $r;
+    }
+
     public static function getPerformerList()
     {
         return User::find()->all();
