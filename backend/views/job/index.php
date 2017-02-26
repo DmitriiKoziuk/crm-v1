@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\grid\GridView;
 use backend\models\Job;
+use yii\helpers\Url;
+use backend\assets\JobIndexAsset;
 
 /**
  * @var $this         yii\web\View
@@ -14,6 +16,8 @@ use backend\models\Job;
 
 $this->title = Yii::t('app', 'Jobs');
 $this->params['breadcrumbs'][] = $this->title;
+
+JobIndexAsset::register($this);
 ?>
 <div class="job-index">
 
@@ -41,12 +45,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
+            [
+                'attribute' => 'id',
+                'contentOptions' => function ($model) {
+                    /* @var $model \backend\models\Job */
+                    return [
+                        'class' => 'link-to',
+                        'data-href' => Url::to(['/job/update', 'id' => $model->id])
+                    ];
+                }
+            ],
             [
                 'attribute' => 'clientFullName',
                 'content'   => function ($model) {
                     /* @var $model \backend\models\Job */
                     return str_replace(' ', '<br>', $model->getClientFullName());
+                },
+                'contentOptions' => function ($model) {
+                    /* @var $model \backend\models\Job */
+                    return [
+                        'class' => 'link-to',
+                        'data-href' => Url::to(['/job/view', 'id' => $model->id])
+                    ];
                 }
             ],
             [
