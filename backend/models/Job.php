@@ -201,10 +201,10 @@ class Job extends ActiveRecord
         if (is_float($totalPrice)) {
             $price  = explode('.', number_format($totalPrice, 2, '.', ''));
             $number = Yii::t('app', '{n, spellout}', ['n' => intval($price[0])]);
-            return mb_strtoupper(mb_substr($number, 0, 1)) . mb_substr($number, 1) . ' ' . Yii::t('app', 'currency') . ' ' . $price[1] . ' ' . Yii::t('app', 'cent');
+            return mb_substr($number, 0, 1) . mb_substr($number, 1) . ' ' . Yii::t('app', 'currency') . ' ' . $price[1] . ' ' . Yii::t('app', 'cent');
         } else {
             $number = Yii::t('app', '{n, spellout}', ['n' => $totalPrice]);
-            return mb_strtoupper(mb_substr($number, 0, 1)) . mb_substr($number, 1) . ' ' . Yii::t('app', 'currency') . ' 00 ' . Yii::t('app', 'cent');
+            return mb_substr($number, 0, 1) . mb_substr($number, 1) . ' ' . Yii::t('app', 'currency') . ' 00 ' . Yii::t('app', 'cent');
         }
     }
 
