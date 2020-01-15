@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5bcf54ccfcf292325e50f717385fc704",
+    "content-hash": "2d4e128b7c93cc3a623072ddd044508f",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -1961,27 +1961,31 @@
         },
         {
             "name": "unclead/yii2-multiple-input",
-            "version": "1.4.1",
+            "version": "2.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/unclead/yii2-multiple-input.git",
-                "reference": "157a7ddd8ae4f89cb632f6e0366f9a1df22d276c"
+                "reference": "cc89d57b083ae82fec3f4dc547e6c936fa1719bd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/unclead/yii2-multiple-input/zipball/157a7ddd8ae4f89cb632f6e0366f9a1df22d276c",
-                "reference": "157a7ddd8ae4f89cb632f6e0366f9a1df22d276c",
+                "url": "https://api.github.com/repos/unclead/yii2-multiple-input/zipball/cc89d57b083ae82fec3f4dc547e6c936fa1719bd",
+                "reference": "cc89d57b083ae82fec3f4dc547e6c936fa1719bd",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0",
-                "yiisoft/yii2": "*"
+                "yiisoft/yii2": ">=2.0.13"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "5.7.*"
             },
             "type": "yii2-extension",
             "autoload": {
                 "psr-4": {
-                    "unclead\\widgets\\examples\\": "examples/",
-                    "unclead\\widgets\\": "src/"
+                    "unclead\\multipleinput\\examples\\": "examples/",
+                    "unclead\\multipleinput\\": "src/",
+                    "unclead\\multipleinput\\tests\\": "tests/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2002,7 +2006,7 @@
                 "yii2 multiple input",
                 "yii2 tabular input"
             ],
-            "time": "2016-09-16T06:07:41+00:00"
+            "time": "2019-12-14T10:41:23+00:00"
         },
         {
             "name": "yiisoft/yii2",
