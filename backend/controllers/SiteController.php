@@ -26,7 +26,7 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-        $jobNew     = Job::find()->where(['status' => 'new'])->all();
+        /*$jobNew     = Job::find()->where(['status' => 'new'])->all();
         $jobInWork  = Job::find()->where(['status' => 'on-the-job'])->all();
         $jobSuspend = Job::find()->where(['status' => 'pending'])->all();
 
@@ -37,7 +37,8 @@ class SiteController extends Controller
             'jobNew'      => $jobNew,
             'jobInWork'   => $jobInWork,
             'jobSuspend'  => $jobSuspend,
-        ]);
+        ]);*/
+        return $this->renderContent('');
     }
 
     public function actionLogin()
