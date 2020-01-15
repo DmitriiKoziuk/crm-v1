@@ -3,8 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use backend\assets\CreateJobAsset;
-use unclead\widgets\MultipleInput;
-use unclead\widgets\TabularInput;
+use unclead\multipleinput\TabularInput;
 use backend\models\Task;
 use backend\models\Parts;
 use yii\helpers\ArrayHelper;
