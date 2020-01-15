@@ -7,7 +7,7 @@ use yii\web\JsExpression;
 use kartik\select2\Select2;
 use yii\helpers\Url;
 use backend\assets\CreateJobAsset;
-use unclead\widgets\MultipleInput;
+use unclead\multipleinput\MultipleInput;
 
 /**
  * @var $this          yii\web\View
@@ -150,7 +150,7 @@ CreateJobAsset::register($this);
 
         <div class="list">
             <?= $form->field($task, 'name')->widget(MultipleInput::className(), [
-                'limit'             => 30,
+                'max'             => 30,
                 'allowEmptyList'    => false,
                 'enableGuessTitle'  => true,
                 'min'               => 1, // should be at least 2 rows
