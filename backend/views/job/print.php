@@ -21,6 +21,11 @@
             width: 100%;
             margin-top: 40px;
             border-collapse: collapse;
+            font-size: 13px;
+        }
+        table.work-data tbody > tr > th {
+          font-weight: bold;
+          font-size: 16px;
         }
         table.work-data th {
             font-weight: normal;
@@ -39,6 +44,13 @@
             border: none;
             text-align: right;
             padding-right: 5px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .total-price-value {
+          font-weight: bold;
+          font-size: 16px;
         }
 
         .total-price-by-string {
@@ -60,6 +72,7 @@
             margin-top: 40px;
             list-style: none;
             padding: 0;
+            font-size: 11px;
         }
         ul.rules li {
             text-align: justify;
@@ -193,7 +206,7 @@
         <td colspan="5" class="total-price-name">
             Всього:
         </td>
-        <td>
+        <td class="total-price-value">
             <?= number_format($job->getTotalPrice(), 2, ',', '') ?>
         </td>
     </tr>
