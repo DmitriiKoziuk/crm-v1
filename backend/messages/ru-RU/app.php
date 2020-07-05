@@ -48,4 +48,5 @@ return [
     'Price for item'       => 'Цена',
     'Total price'          => 'Сумма',
     'Print invoice'        => 'Печать накладной',
+    'Code'                 => 'Код',
 ];

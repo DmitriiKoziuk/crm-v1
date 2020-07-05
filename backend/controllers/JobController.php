@@ -229,6 +229,7 @@ class JobController extends Controller
                     $newTask->name              = $uTask['name'];
                     $newTask->price             = $uTask['price'];
                     $newTask->performer_percent = $uTask['performer_percent'];
+                    $newTask->code              = $uTask['code'];
                     $newTask->save();
 
                     unset($updateTask[ $index ]);
@@ -250,6 +251,9 @@ class JobController extends Controller
                         if ($task->performer_percent != $uTask['performer_percent']) {
                             $task->performer_percent = $uTask['performer_percent'];
                         }
+                        if ($task->code != $uTask['code']) {
+                            $task->code = $uTask['code'];
+                        }
                         $task->save();
                     }
                 }
@@ -270,6 +274,7 @@ class JobController extends Controller
                     $newPart->name              = $uPart['name'];
                     $newPart->price             = $uPart['price'];
                     $newPart->quantity          = $uPart['quantity'];
+                    $newPart->code              = $uPart['code'];
                     $newPart->save();
 
                     unset($updateParts[ $index ]);
@@ -290,6 +295,9 @@ class JobController extends Controller
                         }
                         if ($part->quantity != $uPart['quantity']) {
                             $part->quantity = $uPart['quantity'];
+                        }
+                        if ($part->code != $uPart['code']) {
+                            $part->code = $uPart['code'];
                         }
                         $part->save();
                     }

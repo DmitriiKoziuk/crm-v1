@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property string  $name
  * @property float   $price
  * @property integer $performer_percent
+ * @property integer $code
  */
 class Task extends ActiveRecord
 {
@@ -32,9 +33,9 @@ class Task extends ActiveRecord
     {
         return [
             [['job_id', 'name'], 'required'],
-            [['job_id', 'performer_percent'], 'integer'],
+            [['job_id', 'performer_percent', 'code'], 'integer'],
             [['price'], 'double'],
-            [['job_id', 'performer_percent', 'price'], 'default', 'value' => 0],
+            [['job_id', 'performer_percent', 'price', 'code'], 'default', 'value' => 0],
             [['name'], 'string'],
         ];
     }
@@ -49,7 +50,8 @@ class Task extends ActiveRecord
             'job_id'            => 'Job ID',
             'name'              => 'Name',
             'price'             => 'Price',
-            'performer_percent' => 'Performer percent'
+            'performer_percent' => 'Performer percent',
+            'code'              => 'Code'
         ];
     }
 }
