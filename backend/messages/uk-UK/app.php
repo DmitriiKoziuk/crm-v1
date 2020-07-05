@@ -49,4 +49,7 @@ return [
     'Total price'          => 'Сумма',
     'Print invoice'        => 'Печать накладной',
     'Code'                 => 'Код',
+    'Mileage'              => 'Пробег',
+    'Mileage Type'         => 'Тип пробега',
+    'Working Hours'        => 'Моточасы',
 ];

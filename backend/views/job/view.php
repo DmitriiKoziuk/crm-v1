@@ -40,6 +40,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => $job->vehicle->frame_number
             ],
             [
+                'label' => Yii::t('app', 'Mileage'),
+                'value' => $job->vehicle->mileage . ' - ' . Yii::t('app', $job->vehicle->getMileageType()),
+            ],
+            [
                 'label' => Yii::t('app', 'Performer name'),
                 'value' => $job->performerName
             ],

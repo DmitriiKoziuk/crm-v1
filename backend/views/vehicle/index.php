@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\Vehicle;
 use yii\helpers\Html;
 use yii\grid\GridView;
 
@@ -27,6 +28,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'model_id',
             'frame_number',
+            [
+                'label' => 'Brand',
+                'content' => function ($model) {
+                    /** @var Vehicle $model */
+                    return ! empty($model->model->brand->name) ? $model->model->brand->name : '';
+                }
+            ],
+            [
+                'label' => 'Model',
+                'content' => function ($model) {
+                    /** @var Vehicle $model */
+                    return ! empty($model->model->name) ? $model->model->name : '';
+                }
+            ],
+            'mileage',
+            [
+                  'attribute' => 'mileage_type',
+                  'content' => function ($model) {
+                      /** @var Vehicle $model */
+                      return $model->getMileageType();
+                  }
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

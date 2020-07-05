@@ -216,10 +216,6 @@ class JobController extends Controller
         $performerList = User::find()->all();
 
         if (Yii::$app->request->isPost) {
-            if (Yii::$app->request->post()) {
-
-            }
-
             $updateTask = Yii::$app->request->post('Task');
 
             foreach ($updateTask as $index => $uTask) {
@@ -314,6 +310,15 @@ class JobController extends Controller
             if ($job->load(Yii::$app->request->post()) && $job->validate()) {
                 $job->save();
             }
+
+            $vehicle = Yii::$app->request->post('Vehicle');
+            if ($job->vehicle->mileage != $vehicle['mileage']) {
+                $job->vehicle->mileage = $vehicle['mileage'];
+            }
+            if ($job->vehicle->mileage_type != $vehicle['mileage_type']) {
+                $job->vehicle->mileage_type = $vehicle['mileage_type'];
+            }
+            $job->vehicle->save();
         }
 
         $taskList = [];
