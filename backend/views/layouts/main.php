@@ -45,7 +45,8 @@ AppAsset::register($this);
                 ['label' => 'Users',    'url' => ['/user/index']],
                 ['label' => 'Clients',  'url' => ['/client/index']],
                 ['label' => 'Vehicles', 'url' => ['/vehicle/index']],
-                ['label' => 'Brands',   'url' => ['/brand/index']]
+                ['label' => 'Brands',   'url' => ['/brand/index']],
+                ['label' => 'Models',   'url' => ['/model/index']],
             ],
         ];
     }

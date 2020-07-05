@@ -25,7 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id',
-            'brand_id',
+            [
+                    'attribute' => 'brand',
+                    'content' => function ($model) {
+                        /** @var \backend\models\Model $model */
+                        return $model->brand->name;
+                    }
+            ],
             'name',
 
             ['class' => 'yii\grid\ActionColumn'],
