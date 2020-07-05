@@ -37,7 +37,9 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Dashboard', 'url' => ['/site/index']],
         ['label' => Yii::t('app', 'Jobs'), 'url' => ['/job/index']],
-        [
+    ];
+    if (1 == Yii::$app->user->identity->getId() || 18 == Yii::$app->user->identity->getId()) {
+        $menuItems[] = [
             'label' => Yii::t('app', 'Options'),
             'items' => [
                 ['label' => 'Users',    'url' => ['/user/index']],
@@ -45,15 +47,15 @@ AppAsset::register($this);
                 ['label' => 'Vehicles', 'url' => ['/vehicle/index']],
                 ['label' => 'Brands',   'url' => ['/brand/index']]
             ],
-        ]
-    ];
+        ];
+    }
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => Yii::t('app', 'Login'), 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
             . Html::submitButton(
-                Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ')',
+                Yii::t('app', 'Logout') . ' (' . Yii::$app->user->identity->username . ' ' . number_format(Yii::$app->user->identity->getToPay(), 2, '.', ' ') . ')',
                 ['class' => 'btn btn-link']
             )
             . Html::endForm()
