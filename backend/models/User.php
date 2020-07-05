@@ -3,7 +3,9 @@
 namespace backend\models;
 
 use Yii;
+use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 use yii\web\UploadedFile;
 use yii\behaviors\TimestampBehavior;
 use yii\imagine\Image;
@@ -29,10 +31,13 @@ use backend\models\Job;
  * @property Job[]   $jobs
  * @property Job[]   $notPaidJobs
  */
-class User extends ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
     public $password;
     public $userPhoto;
+
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
 
     const SCENARIO_ADD             = 'add';
     const SCENARIO_UPDATE          = 'update';
@@ -115,6 +120,46 @@ class User extends ActiveRecord
             'password'   => Yii::t('app', 'Password'),
             'toPay'      => Yii::t('app', 'toPay'),
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
     }
 
     /**

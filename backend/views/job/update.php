@@ -13,7 +13,7 @@ use yii\helpers\Url;
  * @var $this          yii\web\View
  * @var $job           backend\models\Job
  * @var $taskList      array
- * @var $partsList     array
+ * @var $partsList     Parts[]
  * @var $performerList array
  */
 
@@ -66,6 +66,12 @@ CreateJobAsset::register($this);
                 ->dropDownList(ArrayHelper::map($performerList, 'id', 'full_name'), ['prompt' => ''])
             ?>
         </div>
+        <div class="col-md-3">
+            <?= $form->field($job->vehicle, 'mileage') ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($job->vehicle, 'mileage_type')->dropDownList(\backend\models\Vehicle::getMileAgeTypes()) ?>
+        </div>
     </div>
 
     <div class="task-wrapper">
@@ -85,7 +91,18 @@ CreateJobAsset::register($this);
                         'options' => ['style' => 'display:none;'],
                         'headerOptions' => ['style' => 'display:none;'],
                         'value' => function ($data) {
+                            /** @var Task $data */
                             return $data->id;
+                        }
+                    ],
+                    [
+                        'name'  => 'code',
+                        'type'  => 'textInput',
+                        'title' => Yii::t('app', 'Code'),
+                        'headerOptions' => ['style' => 'width: 100px;'],
+                        'value' => function ($data) {
+                            /** @var Task $data */
+                            return $data->code;
                         }
                     ],
                     [
@@ -93,6 +110,7 @@ CreateJobAsset::register($this);
                         'type'  => 'textInput',
                         'title' => Yii::t('app', 'Name'),
                         'value' => function ($data) {
+                            /** @var Task $data */
                             return $data->name;
                         }
                     ],
@@ -102,6 +120,7 @@ CreateJobAsset::register($this);
                         'title' => Yii::t('app', 'Price'),
                         'headerOptions' => ['style' => 'width: 100px;'],
                         'value' => function ($data) {
+                            /** @var Task $data */
                             return $data->price;
                         }
                     ],
@@ -111,6 +130,7 @@ CreateJobAsset::register($this);
                         'title' => Yii::t('app', 'Performer percent'),
                         'headerOptions' => ['style' => 'width: 100px;'],
                         'value' => function ($data) {
+                            /** @var Task $data */
                             return $data->performer_percent;
                         }
                     ],
@@ -121,6 +141,7 @@ CreateJobAsset::register($this);
                         'options'       => ['disabled' => true],
                         'headerOptions' => ['style' => 'width: 100px;'],
                         'value'         => function ($data) {
+                            /** @var Task $data */
                             if ($data->price != 0 && $data->performer_percent != 0) {
                                 return $data->price * ($data->performer_percent / 100);
                             } else {
@@ -160,10 +181,21 @@ CreateJobAsset::register($this);
                         }
                     ],
                     [
+                        'name'  => 'code',
+                        'type'  => 'textInput',
+                        'title' => Yii::t('app', 'Code'),
+                        'headerOptions' => ['style' => 'width: 100px;'],
+                        'value' => function ($data) {
+                            /** @var Parts $data */
+                            return $data->code;
+                        }
+                    ],
+                    [
                         'name'  => 'name',
                         'type'  => 'textInput',
                         'title' => Yii::t('app', 'Name'),
                         'value' => function ($data) {
+                            /** @var Parts $data */
                             return $data->name;
                         }
                     ],
@@ -173,6 +205,7 @@ CreateJobAsset::register($this);
                         'title' => Yii::t('app', 'Quantity'),
                         'headerOptions' => ['style' => 'width: 100px;'],
                         'value' => function ($data) {
+                            /** @var Parts $data */
                             return $data->quantity;
                         }
                     ],
@@ -182,6 +215,7 @@ CreateJobAsset::register($this);
                         'title' => Yii::t('app', 'Price for item'),
                         'headerOptions' => ['style' => 'width: 100px;'],
                         'value' => function ($data) {
+                            /** @var Parts $data */
                             return $data->price;
                         }
                     ],
@@ -192,6 +226,7 @@ CreateJobAsset::register($this);
                         'options'       => ['disabled' => true],
                         'headerOptions' => ['style' => 'width: 100px;'],
                         'value'         => function ($data) {
+                            /** @var Parts $data */
                             if ($data->quantity != 0) {
                                 return ($data->price * $data->quantity);
                             } else {

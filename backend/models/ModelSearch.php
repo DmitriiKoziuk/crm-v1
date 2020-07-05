@@ -10,7 +10,7 @@ use backend\models\Model AS M;
 /**
  * ModelSearch represents the model behind the search form about `backend\models\Model`.
  */
-class ModelSearch extends Model
+class ModelSearch extends M
 {
     /**
      * @inheritdoc
@@ -18,18 +18,9 @@ class ModelSearch extends Model
     public function rules()
     {
         return [
-            [['id', 'brend_id'], 'integer'],
+            [['id', 'brand_id'], 'integer'],
             [['name'], 'safe'],
         ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return M::scenarios();
     }
 
     /**

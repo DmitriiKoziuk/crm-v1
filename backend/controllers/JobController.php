@@ -216,10 +216,6 @@ class JobController extends Controller
         $performerList = User::find()->all();
 
         if (Yii::$app->request->isPost) {
-            if (Yii::$app->request->post()) {
-
-            }
-
             $updateTask = Yii::$app->request->post('Task');
 
             foreach ($updateTask as $index => $uTask) {
@@ -229,6 +225,7 @@ class JobController extends Controller
                     $newTask->name              = $uTask['name'];
                     $newTask->price             = $uTask['price'];
                     $newTask->performer_percent = $uTask['performer_percent'];
+                    $newTask->code              = $uTask['code'];
                     $newTask->save();
 
                     unset($updateTask[ $index ]);
@@ -250,6 +247,9 @@ class JobController extends Controller
                         if ($task->performer_percent != $uTask['performer_percent']) {
                             $task->performer_percent = $uTask['performer_percent'];
                         }
+                        if ($task->code != $uTask['code']) {
+                            $task->code = $uTask['code'];
+                        }
                         $task->save();
                     }
                 }
@@ -270,6 +270,7 @@ class JobController extends Controller
                     $newPart->name              = $uPart['name'];
                     $newPart->price             = $uPart['price'];
                     $newPart->quantity          = $uPart['quantity'];
+                    $newPart->code              = $uPart['code'];
                     $newPart->save();
 
                     unset($updateParts[ $index ]);
@@ -291,6 +292,9 @@ class JobController extends Controller
                         if ($part->quantity != $uPart['quantity']) {
                             $part->quantity = $uPart['quantity'];
                         }
+                        if ($part->code != $uPart['code']) {
+                            $part->code = $uPart['code'];
+                        }
                         $part->save();
                     }
                 }
@@ -306,6 +310,15 @@ class JobController extends Controller
             if ($job->load(Yii::$app->request->post()) && $job->validate()) {
                 $job->save();
             }
+
+            $vehicle = Yii::$app->request->post('Vehicle');
+            if ($job->vehicle->mileage != $vehicle['mileage']) {
+                $job->vehicle->mileage = $vehicle['mileage'];
+            }
+            if ($job->vehicle->mileage_type != $vehicle['mileage_type']) {
+                $job->vehicle->mileage_type = $vehicle['mileage_type'];
+            }
+            $job->vehicle->save();
         }
 
         $taskList = [];

@@ -139,6 +139,12 @@ CreateJobAsset::register($this);
             <?= $form->field($job, 'performer_id')
                 ->dropDownList(ArrayHelper::map($performerList, 'id', 'full_name'), ['prompt' => '']) ?>
         </div>
+        <div class="col-md-3">
+            <?= $form->field($vehicle, 'mileage') ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($vehicle, 'mileage_type')->dropDownList(\backend\models\Vehicle::getMileAgeTypes()) ?>
+        </div>
     </div>
 
 

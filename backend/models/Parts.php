@@ -13,6 +13,7 @@ use yii\db\ActiveRecord;
  * @property string  $name
  * @property double  $price
  * @property integer $quantity
+ * @property integer $code
  */
 class Parts extends ActiveRecord
 {
@@ -31,10 +32,10 @@ class Parts extends ActiveRecord
     {
         return [
             [['job_id', 'name'], 'required'],
-            [['job_id', 'quantity'], 'integer'],
+            [['job_id', 'quantity', 'code'], 'integer'],
             [['name'], 'string'],
             [['price'], 'number'],
-            [['price'], 'default', 'value' => 0],
+            [['price', 'code'], 'default', 'value' => 0],
             [['quantity'], 'default', 'value' => 1],
         ];
     }
@@ -50,6 +51,7 @@ class Parts extends ActiveRecord
             'name' => 'Name',
             'price' => 'Price',
             'quantity' => 'Quantity',
+            'code' => 'Code',
         ];
     }
 }
