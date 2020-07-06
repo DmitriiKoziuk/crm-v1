@@ -38,7 +38,7 @@ AppAsset::register($this);
         ['label' => 'Dashboard', 'url' => ['/site/index']],
         ['label' => Yii::t('app', 'Jobs'), 'url' => ['/job/index']],
     ];
-    if (1 == Yii::$app->user->identity->getId() || 18 == Yii::$app->user->identity->getId()) {
+    if (!Yii::$app->user->isGuest && (1 == Yii::$app->user->identity->getId() || 18 == Yii::$app->user->identity->getId())) {
         $menuItems[] = [
             'label' => Yii::t('app', 'Options'),
             'items' => [
