@@ -142,6 +142,9 @@
       №
     </th>
     <th>
+      Код
+    </th>
+    <th>
       Найменування роботи (послуги, товари)
     </th>
     <th>
@@ -162,6 +165,9 @@
       <tr>
         <td>
             <?= ++$number ?>
+        </td>
+        <td>
+            <?= $task->code ?>
         </td>
         <td class="work-name">
             <?= $task->name ?>
@@ -184,6 +190,9 @@
       <tr>
         <td>
             <?= ++$number ?>
+        </td>
+        <td>
+            <?= $part->code ?>
         </td>
         <td class="work-name">
             <?= $part->name ?>
