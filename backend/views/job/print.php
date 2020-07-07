@@ -141,7 +141,7 @@
     <th>
       №
     </th>
-    <th>
+    <th width="45px">
       Код
     </th>
     <th>
@@ -212,7 +212,7 @@
       </tr>
     <?php endforeach; ?>
   <tr>
-    <td colspan="5" class="total-price-name">
+    <td colspan="6" class="total-price-name">
       Всього:
     </td>
     <td class="total-price-value">
