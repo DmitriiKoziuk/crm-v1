@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\repositories\VehicleModelRepository;
 use yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -17,12 +18,35 @@ use backend\models\Model;
 use backend\models\Task;
 use backend\models\Parts;
 use backend\models\User;
+use backend\repositories\VehicleBrandRepository;
 
 /**
  * JobController implements the CRUD actions for Job model.
  */
 class JobController extends Controller
 {
+    /**
+     * @var VehicleBrandRepository
+     */
+    private $vehicleBrandRepository;
+
+    /**
+     * @var VehicleModelRepository
+     */
+    private $vehicleModelRepository;
+
+    public function __construct(
+        $id,
+        $module,
+        VehicleBrandRepository $vehicleBrandRepository,
+        VehicleModelRepository $vehicleModelRepository,
+        $config = []
+    ) {
+        parent::__construct($id, $module, $config);
+        $this->vehicleBrandRepository = $vehicleBrandRepository;
+        $this->vehicleModelRepository = $vehicleModelRepository;
+    }
+
     /**
      * @inheritdoc
      */
@@ -46,10 +70,19 @@ class JobController extends Controller
     {
         $searchModel = new JobSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $vehicleBrands = $this->vehicleBrandRepository->getAll();
+        $vehicleModels = [];
+        if (! empty($searchModel->vehicleBrandId)) {
+            $brandId = $searchModel->vehicleBrandId;
+            $vehicleModels = $this->vehicleModelRepository
+                ->getModels($brandId);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'vehicleBrands' => $vehicleBrands,
+            'vehicleModels' => $vehicleModels,
         ]);
     }
 

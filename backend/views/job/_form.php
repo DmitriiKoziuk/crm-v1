@@ -1,11 +1,11 @@
 <?php
 
+use yii\web\JsExpression;
+use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-use yii\web\JsExpression;
 use kartik\select2\Select2;
-use yii\helpers\Url;
 use backend\assets\CreateJobAsset;
 use unclead\multipleinput\MultipleInput;
 
@@ -31,12 +31,12 @@ CreateJobAsset::register($this);
 
     <div class="row client-info">
         <div class="col-md-8">
-            <?= $form->field($client, 'full_name')->widget(Select2::classname(), [
+            <?= $form->field($client, 'full_name')->widget(Select2::class, [
                 'initValueText' => $client->full_name, // set the initial display text
                 'options' => ['placeholder' => 'Search for a client ...'],
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'minimumInputLength' => 3,
+                    'minimumInputLength' => 1,
                     'maximumInputLength' => 100,
                     'language' => [
                         'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
@@ -66,12 +66,12 @@ CreateJobAsset::register($this);
 
     <div class="row">
         <div class="col-md-4">
-            <?= $form->field($vehicle, 'frame_number')->widget(Select2::classname(), [
+            <?= $form->field($vehicle, 'frame_number')->widget(Select2::class, [
                 'initValueText' => $vehicle->frame_number, // set the initial display text
                 'options' => ['placeholder' => 'Search for a frame number ...'],
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'minimumInputLength' => 3,
+                    'minimumInputLength' => 1,
                     'maximumInputLength' => 20,
                     'language' => [
                         'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
@@ -88,12 +88,12 @@ CreateJobAsset::register($this);
             ]); ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($brand, 'name')->widget(Select2::classname(), [
+            <?= $form->field($brand, 'name')->widget(Select2::class, [
                 'initValueText' => $brand->name, // set the initial display text
                 'options' => ['placeholder' => 'Search for a brand ...'],
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'minimumInputLength' => 3,
+                    'minimumInputLength' => 1,
                     'maximumInputLength' => 100,
                     'language' => [
                         'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
@@ -110,7 +110,7 @@ CreateJobAsset::register($this);
             ]); ?>
         </div>
         <div class="col-md-4">
-            <?= $form->field($model, 'name')->widget(Select2::classname(), [
+            <?= $form->field($model, 'name')->widget(Select2::class, [
                 'value' => 'hello',
                 'initValueText' => 'hello',
                 'options' => ['placeholder' => 'Search for a model ...'],

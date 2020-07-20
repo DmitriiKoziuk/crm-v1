@@ -3,18 +3,33 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\Vehicle;
-use backend\models\VehicleSearch;
+use yii\web\Response;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\ServerErrorHttpException;
 use yii\filters\VerbFilter;
-use yii\web\Response;
+use yii\helpers\Json;
+use backend\models\Vehicle;
+use backend\models\VehicleSearch;
+use backend\repositories\VehicleModelRepository;
 
 /**
  * VehicleController implements the CRUD actions for Vehicle model.
  */
 class VehicleController extends Controller
 {
+    private $vehicleModelRepository;
+
+    public function __construct(
+        $id,
+        $module,
+        VehicleModelRepository $vehicleModelRepository,
+        $config = []
+    ) {
+        parent::__construct($id, $module, $config);
+        $this->vehicleModelRepository = $vehicleModelRepository;
+    }
+
     /**
      * @inheritdoc
      */
@@ -22,7 +37,7 @@ class VehicleController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -134,6 +149,32 @@ class VehicleController extends Controller
         return $out;
     }
 
+    public function actionBrandVehicles()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        try {
+            $post = Yii::$app->request->post();
+            if (empty($post['depdrop_all_params']['vehicleBrandId'])) {
+                throw new \Exception();
+            }
+            $brandId = (int) $post['depdrop_all_params']['vehicleBrandId'];
+            $vehicleModels = $this->vehicleModelRepository->getModels($brandId);
+            $response = [
+                'output' => [],
+                'selected' => '',
+            ];
+            foreach ($vehicleModels as $vehicleModel) {
+                $response['output'][] = [
+                    'id' => $vehicleModel->id,
+                    'name' => $vehicleModel->name,
+                ];
+            }
+            return $response;
+        } catch (\Throwable $e) {
+            Yii::error($e);
+            throw new ServerErrorHttpException();
+        }
+    }
 
     /**
      * Finds the Vehicle model based on its primary key value.

@@ -4,7 +4,6 @@ namespace backend\models;
 
 use yii;
 use yii\db\ActiveRecord;
-use backend\models\User;
 
 /**
  * This is the model class for table "job".
@@ -90,71 +89,88 @@ class Job extends ActiveRecord
 
     public function getClient()
     {
-        return $this->hasOne(Client::className(), ['id' => 'client_id']);
+        return $this->hasOne(Client::class, ['id' => 'client_id']);
     }
 
     public function getVehicle()
     {
-        return $this->hasOne(Vehicle::className(), ['id' => 'vehicle_id']);
+        return $this->hasOne(Vehicle::class, ['id' => 'vehicle_id']);
     }
 
     public function getCreator()
     {
-        return $this->hasOne(User::className(), ['id' => 'creator_id']);
+        return $this->hasOne(User::class, ['id' => 'creator_id']);
     }
 
     public function getPerformer()
     {
-        return $this->hasOne(User::className(), ['id' => 'performer_id']);
+        return $this->hasOne(User::class, ['id' => 'performer_id']);
     }
 
     public function getTasks()
     {
-        return $this->hasMany(Task::className(), ['job_id' => 'id']);
+        return $this->hasMany(Task::class, ['job_id' => 'id']);
     }
 
     public function getParts()
     {
-        return $this->hasMany(Parts::className(), ['job_id' => 'id']);
+        return $this->hasMany(Parts::class, ['job_id' => 'id']);
     }
 
     public function getClientFullName()
     {
-        return $this->client->full_name;
+        if ($this->client) {
+            return $this->client->full_name;
+        }
+        return '';
     }
     
     public function getClientPhoneNumber()
     {
-        return $this->client->phone_number;
+        if ($this->client) {
+            return $this->client->phone_number;
+        }
+        return '';
     }
 
     public function getVehicleFrameNumber()
     {
-        return $this->vehicle->frame_number;
+        if ($this->vehicle) {
+            return $this->vehicle->frame_number;
+        }
+        return '';
     }
 
     public function getModelName()
     {
-        return $this->vehicle->model->name;
+        if ($this->vehicle) {
+            return $this->vehicle->model->name;
+        }
+        return '';
     }
 
     public function getBrandName()
     {
-        return $this->vehicle->model->brand->name;
+        if ($this->vehicle && $this->vehicle->model && $this->vehicle->model->brand) {
+            return $this->vehicle->model->brand->name;
+        }
+        return '';
     }
 
     public function getCreatorName()
     {
-        return $this->creator->full_name;
+        if ($this->creator) {
+            return $this->creator->full_name;
+        }
+        return '';
     }
 
     public function getPerformerName()
     {
-        if (is_null($this->performer)) {
-            return '';
-        } else {
+        if ($this->performer) {
             return $this->performer->full_name;
         }
+        return '';
     }
 
     public function isPerformerSet()

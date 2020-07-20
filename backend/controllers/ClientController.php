@@ -135,6 +135,31 @@ class ClientController extends Controller
         return $out;
     }
 
+    public function actionGetPhoneNumbers($q = null, $id = null)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $out = ['results' => ['id' => '', 'name' => '']];
+
+        if (! is_null($q)) {
+            /** @var Client[] $clients */
+            $clients = Client::find()
+                ->where(['like', 'phone_number', $q])
+                ->indexBy('id')
+                ->limit(50)
+                ->all();
+
+            foreach ($clients as $client) {
+                $out['results'][] = [
+                    'id' => $client->id,
+                    'name' => $client->phone_number
+                ];
+            }
+        }
+
+        return $out;
+    }
+
     /**
      * Finds the Client model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

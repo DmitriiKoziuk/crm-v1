@@ -52,4 +52,7 @@ return [
     'Mileage'              => 'Пробег',
     'Mileage Type'         => 'Тип пробега',
     'Working Hours'        => 'Моточасы',
+    'Vehicle Brand'        => 'Бренд',
+    'Search'               => 'Найти',
+    'Vehicle Model'        => 'Модель',
 ];
