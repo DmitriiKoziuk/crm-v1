@@ -25,27 +25,27 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             [
                 'label' => Yii::t('app', 'Client full name'),
-                'value' => $job->client->full_name
+                'value' => !empty($job->client) ? $job->client->full_name : '',
             ],
             [
                 'label' => Yii::t('app', 'Client phone number'),
-                'value' => preg_replace('/([+]{1})([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})/', '$1$2 ($3) $4-$5-$6', $job->client->phone_number)
+                'value' => preg_replace('/([+]{1})([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})/', '$1$2 ($3) $4-$5-$6', $job->client->phone_number ?? '')
             ],
             [
                 'label' => Yii::t('app', 'Brand name') . ' ' . Yii::t('app', 'Model name'),
-                'value' => $job->vehicle->model->brand->name . ' ' . $job->vehicle->model->name
+                'value' => !empty($job->vehicle) ? $job->vehicle->model->brand->name . ' ' . $job->vehicle->model->name : '',
             ],
             [
                 'label' => Yii::t('app', 'Vehicle frame number'),
-                'value' => $job->vehicle->frame_number
+                'value' => $job->vehicle->frame_number ?? '',
             ],
             [
                 'label' => Yii::t('app', 'Mileage'),
-                'value' => $job->vehicle->mileage . ' - ' . Yii::t('app', $job->vehicle->getMileageType()),
+                'value' => !empty($job->vehicle) ? $job->vehicle->mileage . ' - ' . Yii::t('app', $job->vehicle->getMileageType()) : '',
             ],
             [
                 'label' => Yii::t('app', 'Performer name'),
-                'value' => $job->performerName
+                'value' => $job->getPerformerName(),
             ],
             'created_at:date',
         ],
