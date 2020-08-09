@@ -50,7 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'clientPhoneNumber',
                 'content'   => function ($model) {
-                    return preg_replace("/([+]{1})([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})/", "$1$2 ($3) $4-$5-$6", $model->client->phone_number);
+                    if (!empty($model->client) && !empty($model->client->phone_number)) {
+                        return preg_replace("/([+]{1})([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{2})([0-9]{2})/", "$1$2 ($3) $4-$5-$6", $model->client->phone_number);
+                    }
+                    return '';
                 }
             ],
             'vehicleFrameNumber',
