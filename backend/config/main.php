@@ -1,4 +1,7 @@
 <?php
+
+use backend\components\Settings;
+
 $params = array_merge(
     require(__DIR__ . '/../../common/config/params.php'),
     require(__DIR__ . '/../../common/config/params-local.php'),
@@ -48,5 +51,10 @@ return [
     'as AccessBehavior' => [
         'class'         => 'backend\components\AccessBehavior',
         'redirectUri' => '/site/login'
+    ],
+    'container' => [
+        'singletons' => [
+            Settings::class => [],
+        ],
     ],
 ];

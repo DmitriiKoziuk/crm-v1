@@ -10,7 +10,7 @@ use yii\web\UploadedFile;
 use yii\behaviors\TimestampBehavior;
 use yii\imagine\Image;
 use Imagine\Image\Box;
-use backend\models\Job;
+use backend\components\Settings;
 
 /**
  * This is the model class for table "user".
@@ -267,5 +267,15 @@ class User extends ActiveRecord implements IdentityInterface
         }
 
         return $toPay;
+    }
+
+    public function isAdmin(): bool {
+        return in_array($this->id, $this->settings()->admin()->getIds());
+    }
+
+    /** @noinspection PhpUnhandledExceptionInspection */
+    protected function settings(): Settings
+    {
+        return Yii::$container->get(Settings::class);
     }
 }

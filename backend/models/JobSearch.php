@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use Throwable;
 use yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -67,6 +68,7 @@ class JobSearch extends Job
      * @param array $params
      *
      * @return ActiveDataProvider
+     * @throws Throwable
      */
     public function search($params)
     {
@@ -196,6 +198,20 @@ class JobSearch extends Job
             $query->andWhere(['<=', 'done_at', $this->jobDoneTo]);
         }
 
+        $user = $this->getCurrentLoggedInInUser();
+        if (!$user->isAdmin()) {
+            $query->andWhere(['performer_id' => $user->id]);
+        }
+
         return $dataProvider;
+    }
+
+    /**
+     * @noinspection PhpIncompatibleReturnTypeInspection
+     * @throws Throwable
+     */
+    protected function getCurrentLoggedInInUser(): User
+    {
+        return Yii::$app->user->getIdentity();
     }
 }
