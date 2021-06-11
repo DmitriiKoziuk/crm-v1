@@ -11,6 +11,9 @@ use yii\widgets\Breadcrumbs;
 use common\widgets\Alert;
 
 AppAsset::register($this);
+
+/** @var \backend\models\User $user */
+$user = Yii::$app->user->getIdentity();
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -38,15 +41,15 @@ AppAsset::register($this);
         ['label' => 'Dashboard', 'url' => ['/site/index']],
         ['label' => Yii::t('app', 'Jobs'), 'url' => ['/job/index']],
     ];
-    if (!Yii::$app->user->isGuest && (1 == Yii::$app->user->identity->getId() || 18 == Yii::$app->user->identity->getId())) {
+    if ($user && $user->isAdmin()) {
         $menuItems[] = [
             'label' => Yii::t('app', 'Options'),
             'items' => [
-                ['label' => 'Users',    'url' => ['/user/index']],
-                ['label' => 'Clients',  'url' => ['/client/index']],
-                ['label' => 'Vehicles', 'url' => ['/vehicle/index']],
-                ['label' => 'Brands',   'url' => ['/brand/index']],
-                ['label' => 'Models',   'url' => ['/model/index']],
+                ['label' => 'Персонал',    'url' => ['/user/index']],
+                ['label' => 'Клиенты',  'url' => ['/client/index']],
+                ['label' => 'Транспортные средства', 'url' => ['/vehicle/index']],
+                ['label' => 'Бренд',   'url' => ['/brand/index']],
+                ['label' => 'Модель',   'url' => ['/model/index']],
             ],
         ];
     }

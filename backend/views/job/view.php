@@ -15,6 +15,9 @@ use yii\helpers\Url;
 $this->title = $job->id;
 $this->params['breadcrumbs'][] = ['label' => 'Jobs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+/** @var \backend\models\User $loggedInUse */
+$loggedInUse = Yii::$app->user->getIdentity();
 ?>
 <div class="job-view">
 
@@ -88,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::a(Yii::t('app', 'On the job'), ['/job/take-job', 'id' => $job->id], ['class' => 'btn btn-info']) ?>
             <?php endif; ?>
 
-            <?php if (($job->performer_id == Yii::$app->user->identity->getId() || $job->creator_id == Yii::$app->user->identity->getId()) && ($job->status == 'pending' || $job->status == 'new') && $job->status != 'done'): ?>
+            <?php if (($job->performer_id == $loggedInUse->getId() || $job->creator_id == $loggedInUse->getId() || $loggedInUse->isAdmin()) && ($job->status == 'pending' || $job->status == 'new') && $job->status != 'done'): ?>
                 <?= Html::a(Yii::t('app', 'To work'), ['/job/to-work', 'id' => $job->id], ['class' => 'btn btn-info']) ?>
             <?php endif; ?>
 

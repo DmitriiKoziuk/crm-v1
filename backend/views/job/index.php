@@ -107,6 +107,7 @@ JobIndexAsset::register($this);
             ],
             [
                 'attribute' => 'Vehicle',
+                'label' => 'ТС',
                 'content'   => function ($model) {
                     /* @var $model Job */
                     return $model->getBrandName() . '<br>' . $model->getModelName();

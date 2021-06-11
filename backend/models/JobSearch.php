@@ -200,7 +200,10 @@ class JobSearch extends Job
 
         $user = $this->getCurrentLoggedInInUser();
         if (!$user->isAdmin()) {
-            $query->andWhere(['performer_id' => $user->id]);
+            $query->andWhere(['OR',
+                ['performer_id' => $user->id],
+                ['performer_id' => 0],
+            ]);
         }
 
         return $dataProvider;

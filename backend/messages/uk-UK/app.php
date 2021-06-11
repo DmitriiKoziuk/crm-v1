@@ -55,4 +55,5 @@ return [
     'Vehicle Brand'        => 'Бренд',
     'Search'               => 'Найти',
     'Vehicle Model'        => 'Модель',
+    'Close'                => 'Закрити',
 ];

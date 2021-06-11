@@ -421,8 +421,10 @@ class JobController extends Controller
     public function actionToWork($id)
     {
         $job = Job::findOne($id);
+        /** @var \backend\models\User $loggedInUser */
+        $loggedInUser = Yii::$app->user->getIdentity();
 
-        if ($job->performer_id == Yii::$app->user->identity->getId() || $job->creator_id == Yii::$app->user->identity->getId()) {
+        if ($job->performer_id == $loggedInUser->getId() || $job->creator_id == $loggedInUser->getId() || $loggedInUser->isAdmin()) {
             $job->status = 'on-the-job';
             $job->save();
         }
